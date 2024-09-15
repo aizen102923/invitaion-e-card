@@ -1,50 +1,91 @@
-/* styles.css */
+@import url(https://fonts.googleapis.com/css?family=Carter+One);
 
-/* General Styles */
+/* Colors for sections */
+$colors: #f8b195, #c06c85, #6c5c7c, #345d7e;
+
+/* Inputs */
+input[type='radio'] {
+  display: none;
+}
+
+/* Radio input navigation for scrolling */
+@for $i from 1 through length($colors) {
+  input[type='radio']#section#{$i}:checked ~ nav label[for='section#{$i}'] {
+    background-color: white;
+  }
+  
+  input[type='radio']#section#{$i}:checked ~ section:nth-of-type(#{$i}) { 
+    z-index: 1;
+    top: 0;
+    transition: top 0.5s ease-in-out;
+    transition-delay: 0s;
+  }
+  
+  input[type='radio']#section#{$i}:checked ~ .cover { 
+    background-color: nth($colors, $i);
+  }
+}
+
+/* Navigation dots for page scrolling */
+.nav {
+  position: fixed;
+  z-index: 2;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  &__item {
+    width: 12px;
+    height: 12px;
+    display: block;
+    margin: 12px auto;
+    border: solid 2px white;
+    border-radius: 50%;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: white;
+    }
+  }
+}
+
+/* Sections */
+section {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 100%; right: 0; left: 0;
+  transition-delay: 0.5s;
+}
+
+/* Section background colors */
+@for $i from 1 through 4 {
+  section:nth-of-type(#{$i}) {
+    background: nth($colors, $i);
+  }
+}
+
+/* Fix white space */
+.cover {
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -1;
+}
+
+/* Base styles */
+html, body {
+  height: 100%;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
+  overflow: hidden;
+  color: white;
+  font: 100% 'Carter One', cursive;
 }
 
-/* Login Form Styles */
-#login-form {
-    margin-top: 20px;
-}
-
-#login-form label {
-    text-align: left;
-}
-
-#login-form input {
-    margin-bottom: 15px;
-}
-
-/* Birthday Page Styles */
-.bg-pink {
-    background-color: #ffb6c1;
-}
-
-.slideshow-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    margin: auto;
-}
-
-.slides {
-    width: 100%;
-    display: none;
-    border-radius: 10px;
-}
-
-/* Wedding Page Styles */
-.bg-light {
-    background-color: #f8f9fa;
-}
-
-/* Responsive Images */
-img {
-    max-width: 100%;
-    height: auto;
+h1 {
+  font-size: 6em;
+  text-align: center;
 }
