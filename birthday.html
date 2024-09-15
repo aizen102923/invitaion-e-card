@@ -6,12 +6,12 @@
     <title>Aizen's 1st Birthday Invitation</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Animate.css -->
+    <!-- Animate.css for animations -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/styles.css">
     <style>
-        /* Background image for the page */
+        /* Background image */
         body {
             background-image: url('/static/images/123.jpg');
             background-size: cover;
@@ -21,84 +21,86 @@
             overflow-y: scroll;
             color: white;
         }
-        .content-section {
-            padding: 100px 0;
+        /* Balloon styling */
+        .balloon {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+            background-image: url('/static/images/balloon.png');
+            background-size: cover;
+            cursor: pointer;
         }
-        h1, h3, p {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        #countdown {
-            font-size: 2.5rem;
-        }
-        #start-music-btn {
-            display: none;
+        #map {
+            height: 300px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <!-- Background music -->
-    <audio id="cocomelon-song" loop>
+    <audio id="cocomelon-song" autoplay loop>
         <source src="/static/audio/Wheels on the Bus.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-    <!-- Button to start music manually (for mobile devices) -->
-    <div class="container text-center">
-        <button id="start-music-btn" class="btn btn-warning my-3">Tap to Play Music</button>
-    </div>
-
     <!-- Main content -->
     <div class="container content-section text-center">
-        <h1 class="animate__animated animate__bounce">Welcome to Aizen’s 1st Birthday!</h1>
-        <div id="countdown" class="my-4"></div>
+        <h1 class="animate__animated animate__bounceInDown">Welcome to Aizen’s 1st Birthday!</h1>
+        <div id="countdown" class="my-4 text-white animate__animated animate__fadeInDown"></div>
+        
+        <!-- Interactive Balloons -->
+        <div class="balloon" id="balloon1" style="top: 50px; left: 100px;"></div>
+        <div class="balloon" id="balloon2" style="top: 120px; left: 300px;"></div>
+        <div class="balloon" id="balloon3" style="top: 200px; left: 500px;"></div>
 
-        <!-- Slideshow -->
-        <div class="row my-5">
-            <div class="col-md-6">
-                <div class="slideshow-container">
-                    <img class="slides img-fluid rounded shadow animate__animated animate__fadeIn" src="/static/images/aizen-birthday-1.jpg" alt="Aizen Birthday 1">
-                    <img class="slides img-fluid rounded shadow animate__animated animate__fadeIn" src="/static/images/aizen-birthday-2.jpg" alt="Aizen Birthday 2">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h3>Fun Facts About Aizen!</h3>
-                <p>Aizen's favorite toy is a colorful train set.</p>
-                <button class="btn btn-warning" onclick="revealFact()">Reveal Aizen's First Word</button>
-                <p id="fact" class="mt-3" style="display:none;">Aizen's first word was "Mama"!</p>
-            </div>
-        </div>
-
-        <!-- Confetti Celebration -->
-        <div class="text-center">
-            <button class="btn btn-warning" onclick="confettiEffect()">Celebrate!</button>
-        </div>
+        <!-- Map for Venue -->
+        <h3>Party Venue</h3>
+        <div id="map"></div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=Your+Venue+Address" target="_blank" class="btn btn-primary mt-4">Open in Google Maps</a>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
-    <script src="/static/js/birthday.js"></script>
     <!-- Confetti JS -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    
+
+    <!-- Google Maps API -->
     <script>
-        // Attempt to auto-play music
-        document.addEventListener('DOMContentLoaded', function () {
-            const audio = document.getElementById('cocomelon-song');
-            const startButton = document.getElementById('start-music-btn');
-
-            // Attempt to autoplay music
-            audio.play().catch(() => {
-                // If autoplay fails (e.g., on mobile), show the play button
-                startButton.style.display = 'block';
+        function initMap() {
+            var venue = {lat: 40.730610, lng: -73.935242}; // Your latitude and longitude
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: venue
             });
-
-            // Play music on button click for mobile
-            startButton.addEventListener('click', function() {
-                audio.play();
-                startButton.style.display = 'none';
+            var marker = new google.maps.Marker({
+                position: venue,
+                map: map
             });
-        });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+    <!-- Interactive Balloons JS -->
+    <script>
+        const balloons = document.querySelectorAll('.balloon');
+
+        function moveBalloon(balloon) {
+            let randomX = Math.random() * (window.innerWidth - 100);
+            let randomY = Math.random() * (window.innerHeight - 150);
+            
+            balloon.style.transition = 'transform 5s ease-in-out';
+            balloon.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        function randomBalloonMovement() {
+            balloons.forEach(balloon => {
+                setInterval(() => {
+                    moveBalloon(balloon);
+                }, 3000); // Move every 3 seconds
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', randomBalloonMovement);
     </script>
 </body>
 </html>
