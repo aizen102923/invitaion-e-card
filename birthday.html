@@ -13,7 +13,7 @@
     <style>
         /* Background image for the page */
         body {
-            background-image: url('/static/images/cocomelon-background.jpg');
+            background-image: url('/static/images/123');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -30,14 +30,22 @@
         #countdown {
             font-size: 2.5rem;
         }
+        #start-music-btn {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <!-- Background music -->
-    <audio id="cocomelon-song" autoplay loop>
+    <audio id="cocomelon-song" loop>
         <source src="/static/audio/Wheels on the Bus.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+
+    <!-- Button to start music manually (for mobile devices) -->
+    <div class="container text-center">
+        <button id="start-music-btn" class="btn btn-warning my-3">Tap to Play Music</button>
+    </div>
 
     <!-- Main content -->
     <div class="container content-section text-center">
@@ -72,5 +80,25 @@
     <script src="/static/js/birthday.js"></script>
     <!-- Confetti JS -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        // Attempt to auto-play music
+        document.addEventListener('DOMContentLoaded', function () {
+            const audio = document.getElementById('cocomelon-song');
+            const startButton = document.getElementById('start-music-btn');
+
+            // Attempt to autoplay music
+            audio.play().catch(() => {
+                // If autoplay fails (e.g., on mobile), show the play button
+                startButton.style.display = 'block';
+            });
+
+            // Play music on button click for mobile
+            startButton.addEventListener('click', function() {
+                audio.play();
+                startButton.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
